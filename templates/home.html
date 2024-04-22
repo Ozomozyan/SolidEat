@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Home - SolidEat{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <div class="hero-text">
+        <h1>Find the Perfect Meal</h1>
+        <p>Welcome to SolidEat, your premier source for solidary restaurant reservations. Explore local dining options and reserve your spot today!</p>
+        <a href="{% url 'list_restaurants' %}" class="btn btn-primary">Browse Restaurants</a>
+    </div>
+</div>
+<div class="features">
+    <div class="feature">
+        <h2>Discover</h2>
+        <p>Explore a variety of solidary restaurants and find your new favorite.</p>
+    </div>
+    <div class="feature">
+        <h2>Reserve</h2>
+        <p>Book your table easily with just a few clicks. Plan your meals ahead.</p>
+    </div>
+    <div class="feature">
+        <h2>Enjoy</h2>
+        <p>Enjoy a wonderful meal knowing you're supporting your local community.</p>
+    </div>
+</div>
+<div class="about">
+    <h2>About SolidEat</h2>
+    <p>SolidEat is dedicated to linking diners with solidary restaurants. By making a reservation through our platform, you're not just booking a meal—you're making a difference.</p>
+</div>
+{% endblock %}

@@ -1,1 +1,3 @@
-console.log("Welcome to SolidEat!");
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Welcome to SolidEat!');
+});

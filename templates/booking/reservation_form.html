@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Make a Reservation{% endblock %}
+{% block content %}
+<div class="reservation-form">
+    <h2>Make a Reservation</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="id_date">Date:</label>
+            {{ form.date }}
+        </div>
+        <div class="form-group">
+            <label for="id_time">Time:</label>
+            {{ form.time }}
+        </div>
+        <div class="form-group">
+            <label for="id_number_of_people">Number of people:</label>
+            {{ form.number_of_people }}
+        </div>
+        <div class="form-group">
+            <label for="id_special_requests">Special requests:</label>
+            {{ form.special_requests }}
+        </div>
+        <button type="submit" class="btn-submit">Book Now</button>
+    </form>
+</div>
+{% endblock %}

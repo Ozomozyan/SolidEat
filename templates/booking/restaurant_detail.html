@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% load static %}  <!-- This line is necessary to use the 'static' template tag -->
+
+{% block title %}{{ restaurant.name }}{% endblock %}
+
+{% block content %}
+<div class="restaurant-detail">
+    <h2>{{ restaurant.name }}</h2>
+    <div class="restaurant-meta">
+        <span class="location">{{ restaurant.location }}</span>
+        <span class="capacity">Capacity: {{ restaurant.capacity }} guests</span>
+    </div>
+    <div class="map-container">
+        <!-- Placeholder for map (Use an integration like Google Maps or Leaflet) -->
+        <div id="restaurant-map" data-location="{{ restaurant.location }}"></div>
+    </div>
+    <div class="gallery">
+        <h3>Gallery</h3>
+        <!-- Placeholder for image gallery -->
+        {% for image in restaurant.images.all %}
+        <img src="{{ image.url }}" alt="Image of {{ restaurant.name }}">
+        {% endfor %}
+    </div>
+    <div class="description">
+        <h3>Description</h3>
+        <p>{{ restaurant.description }}</p>
+    </div>
+    <div class="reviews">
+        <h3>Reviews</h3>
+        {% for review in restaurant.reviews.all %}
+        <div class="review">
+            <strong>{{ review.user.username }}</strong>
+            <p>{{ review.content }}</p>
+            <span>Rating: {{ review.rating }}/5</span>
+        </div>
+        {% empty %}
+        <p>No reviews yet.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/restaurant-map.js' %}"></script>
+{% endblock %}
