@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SolidEat{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header>
+        <h1>Welcome to SolidEat</h1>
+    </header>
+    <nav>
+        <!-- Navigation Links -->
+    </nav>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    <footer>
+        <p>© 2024 SolidEat. All rights reserved.</p>
+    </footer>
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>
