@@ -1,12 +1,15 @@
-{% extends "base.html" %}
-{% block title %}Restaurant List{% endblock %}
+{% extends 'base.html' %}
+
 {% block content %}
-<div>
-    <h2>Restaurants</h2>
-    <ul>
-        {% for restaurant in restaurants %}
-        <li>{{ restaurant.name }} - {{ restaurant.location }}</li>
-        {% endfor %}
-    </ul>
-</div>
+<h2>Restaurants</h2>
+<ul>
+    {% for restaurant in restaurants %}
+    <li>
+        {{ restaurant.name }} - <a href="{% url 'restaurant_detail' restaurant.id %}">Details</a>
+        {% if user.is_authenticated %}
+        - <a href="{% url 'book_reservation' restaurant.id %}">Reserve</a>
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>
 {% endblock %}

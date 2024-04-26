@@ -12,17 +12,45 @@ from django.contrib import messages
 from .models import Restaurant
 from .forms import RestaurantForm
 from django.contrib.auth.decorators import login_required, user_passes_test
+from .forms import ReservationForm, ReviewForm
 
 def home(request):
     return render(request, 'home.html')
 
+def restaurant_detail(request, restaurant_id):
+    restaurant = get_object_or_404(Restaurant, id=restaurant_id)
+    if request.method == 'POST':
+        if 'reserve' in request.POST:
+            reservation_form = ReservationForm(request.POST)
+            if reservation_form.is_valid():
+                reservation = reservation_form.save(commit=False)
+                reservation.user = request.user
+                reservation.restaurant = restaurant
+                reservation.save()
+                messages.success(request, 'Reservation made successfully!')
+                return redirect('restaurant_detail', restaurant_id=restaurant.id)
+        elif 'review' in request.POST:
+            review_form = ReviewForm(request.POST)
+            if review_form.is_valid():
+                review = review_form.save(commit=False)
+                review.user = request.user
+                review.restaurant = restaurant
+                review.save()
+                messages.success(request, 'Review posted successfully!')
+                return redirect('restaurant_detail', restaurant_id=restaurant.id)
+    else:
+        reservation_form = ReservationForm()
+        review_form = ReviewForm()
+    
+    return render(request, 'booking/restaurant_detail.html', {
+        'restaurant': restaurant,
+        'reservation_form': reservation_form,
+        'review_form': review_form
+    })
+
 def list_restaurants(request):
     restaurants = Restaurant.objects.all()
     return render(request, 'booking/list_restaurants.html', {'restaurants': restaurants})
-
-def restaurant_detail(request):
-    restaurants = Restaurant.objects.all()
-    return render(request, 'booking/restaurant_detail.html', {'restaurants': restaurants})
 
 def register(request):
     if request.method == 'POST':
@@ -38,17 +66,26 @@ def register(request):
         form = CustomUserCreationForm()
     return render(request, 'registration/register.html', {'form': form})
 
+@login_required
+def user_profile(request):
+    return render(request, 'booking/user_profile.html')
 
-
-def book_reservation(request):
+@login_required
+def book_reservation(request, restaurant_id):
+    restaurant = get_object_or_404(Restaurant, pk=restaurant_id)
     if request.method == 'POST':
         form = ReservationForm(request.POST)
         if form.is_valid():
-            # Process the valid form data
-            return redirect('success_url')  # Redirect to a new URL
+            reservation = form.save(commit=False)
+            reservation.restaurant = restaurant
+            reservation.user = request.user
+            reservation.save()
+            # Redirect to a new URL, for example the restaurant detail page
+            return redirect('restaurant_detail', restaurant_id=restaurant.id)
     else:
         form = ReservationForm()
-    return render(request, 'booking/reservation_form.html', {'form': form})
+
+    return render(request, 'booking/reservation_form.html', {'form': form, 'restaurant': restaurant})
 
 
 def manager_check(user):
