@@ -1,20 +1,27 @@
 from django.db import models
-from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 
+# Define your custom user model
 class User(AbstractUser):
     is_manager = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
-    pass
 
+# Define the Restaurant model
 class Restaurant(models.Model):
-    manager = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="restaurants")
+    code = models.CharField(max_length=10)
     name = models.CharField(max_length=255)
-    location = models.CharField(max_length=255)
-    capacity = models.IntegerField()
-    description = models.TextField()
+    address = models.CharField(max_length=255)
+    city = models.CharField(max_length=100)
+    tt = models.CharField(max_length=100)  # Assuming 'tt' is a coordinate in string format
+    type = models.CharField(max_length=1, choices=(('S', 'Solidaire'), ('E', 'Economique')))
+    capacity = models.IntegerField(default=0)  # Default capacity
+    description = models.TextField(default="No description available")  # Default description
 
+    def __str__(self):
+        return self.name
+
+# Define the Reservation model
 class Reservation(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="reservations")
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)

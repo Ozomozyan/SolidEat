@@ -3,6 +3,7 @@ from django.forms import widgets
 from django.contrib.auth.forms import UserCreationForm
 from .models import User
 from .models import Restaurant
+from django.forms import ModelForm
 
 class ReservationForm(forms.Form):
     date = forms.DateField(widget=forms.widgets.DateInput(attrs={'type': 'date'}))
@@ -26,7 +27,8 @@ class CustomUserCreationForm(UserCreationForm):
             user.save()
         return user
 
-class RestaurantForm(forms.ModelForm):
+class RestaurantForm(ModelForm):
     class Meta:
         model = Restaurant
-        fields = ['name', 'location', 'capacity', 'description']
+        fields = ['code', 'name', 'address', 'city', 'tt', 'type', 'capacity', 'description']
+
