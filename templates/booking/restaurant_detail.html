@@ -27,16 +27,25 @@
         <p>{{ restaurant.description }}</p>
     </div>
     <div class="reviews">
+        <h3>Submit a Review</h3>
+        <form method="post" action="{% url 'restaurant_detail' restaurant.id %}">
+            {% csrf_token %}
+            {{ review_form.as_p }}
+            <button type="submit" name="submit_review">Submit Review</button>
+        </form>        
+
         <h3>Reviews</h3>
         {% for review in restaurant.reviews.all %}
         <div class="review">
-            <strong>{{ review.user.username }}</strong>
-            <p>{{ review.content }}</p>
-            <span>Rating: {{ review.rating }}/5</span>
+            <p><strong>Review by:</strong> <a href="{% url 'user_profile_public' user_id=review.user.id %}">{{ review.user.username }}</a></p>
+            <p><strong>Rating:</strong> {{ review.rating }}/5</p>
+            <p>{{ review.text }}</p>
+            {% if request.user == review.user %}
+            <a href="{% url 'edit_review' review_id=review.id %}">Edit</a> |
+            <a href="{% url 'delete_review' review_id=review.id %}" onclick="return confirm('Are you sure?')">Delete</a>
+            {% endif %}
         </div>
-        {% empty %}
-        <p>No reviews yet.</p>
-        {% endfor %}
+        {% endfor %}        
     </div>
 </div>
 {% endblock %}

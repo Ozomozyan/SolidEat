@@ -3,11 +3,38 @@
 {% block content %}
 <h2>Manage Restaurant: {{ restaurant.name }}</h2>
 
-<form method="post">
+<form method="post" action="">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Update</button>
+    <button type="submit" name="update_restaurant">Update</button>
 </form>
+
+<h3>Reservations</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Guests</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for reservation in reservations %}
+        <tr>
+            <td>{{ reservation.date }}</td>
+            <td>{{ reservation.time }}</td>
+            <td>{{ reservation.number_of_people }}</td>
+            <td>
+                <a href="{% url 'edit_reservation' reservation.id %}">Edit</a> |
+                <a href="{% url 'delete_reservation' reservation.id %}" onclick="return confirm('Are you sure?')">Delete</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4">No reservations found.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
 
 {% if messages %}
 <ul>

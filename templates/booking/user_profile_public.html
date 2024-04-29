@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Profile of {{ user.username }}</h1>
+{% if user.is_manager %}
+<p>This user manages the following restaurant(s):</p>
+<ul>
+    {% for restaurant in user.managed_restaurants.all %}
+    <li>{{ restaurant.name }} - <a href="{% url 'restaurant_detail' restaurant_id=restaurant.id %}">View Details</a></li>
+    {% empty %}
+    <li>No restaurants are managed by this user.</li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>This user is not managing any restaurants.</p>
+{% endif %}
+<h2>User's Reviews</h2>
+<ul>
+    {% for review in reviews %}
+    <li>{{ review.text }} - Rated: {{ review.rating }}/5</li>
+    {% endfor %}
+</ul>
+<h2>User's Reservations</h2>
+<ul>
+    {% for reservation in reservations %}
+    <li>Reservation at {{ reservation.restaurant.name }} on {{ reservation.date }}</li>
+    {% endfor %}
+</ul>
+{% endblock %}

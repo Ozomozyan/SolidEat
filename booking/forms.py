@@ -58,7 +58,8 @@ class RestaurantForm(ModelForm):
 class ReviewForm(ModelForm):
     class Meta:
         model = Review
-        fields = ['text']
+        fields = ['text', 'rating']
         widgets = {
             'text': Textarea(attrs={'cols': 40, 'rows': 5}),
+            'rating': Select(choices=[(i, str(i)) for i in range(1, 6)])
         }

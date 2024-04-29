@@ -6,6 +6,15 @@
 <h1>User Profile</h1>
 <p>Welcome, {{ user.username }}!</p>
 
+{% if user.is_manager and user.managed_restaurants.exists %}
+    <p>Managed Restaurants:</p>
+    <ul>
+        {% for restaurant in user.managed_restaurants.all %}
+        <li><a href="{% url 'manage_restaurant' restaurant_id=restaurant.id %}">{{ restaurant.name }}</a></li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
 <h2>Your Reservations</h2>
 <ul>
     {% for reservation in reservations %}

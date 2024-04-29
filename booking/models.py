@@ -50,4 +50,9 @@ class Review(models.Model):
     restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name='reviews')
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='user_reviews')
     text = models.TextField()
+    rating = models.IntegerField(default=0, choices=[(i, str(i)) for i in range(1, 6)])  # Rating from 1 to 5
     date_posted = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} review of {self.restaurant.name}: {self.rating}/5"
+

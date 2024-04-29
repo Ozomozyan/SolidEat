@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.shortcuts import render
 from .models import Restaurant, Reservation, Review
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login
+from django.contrib.auth import get_user_model, login
 from .forms import ReservationForm
 from django.contrib.auth.models import Group
 from .forms import CustomUserCreationForm
@@ -15,13 +15,17 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from .forms import ReservationForm, ReviewForm
 from datetime import date, datetime, timedelta
 
+
 def home(request):
     return render(request, 'home.html')
 
 def restaurant_detail(request, restaurant_id):
     restaurant = get_object_or_404(Restaurant, id=restaurant_id)
+    reservation_form = ReservationForm()
+    review_form = ReviewForm()
+
     if request.method == 'POST':
-        if 'reserve' in request.POST:
+        if 'submit_reservation' in request.POST:
             reservation_form = ReservationForm(request.POST)
             if reservation_form.is_valid():
                 reservation = reservation_form.save(commit=False)
@@ -30,7 +34,9 @@ def restaurant_detail(request, restaurant_id):
                 reservation.save()
                 messages.success(request, 'Reservation made successfully!')
                 return redirect('restaurant_detail', restaurant_id=restaurant.id)
-        elif 'review' in request.POST:
+            else:
+                messages.error(request, 'Reservation form is invalid.')
+        elif 'submit_review' in request.POST:
             review_form = ReviewForm(request.POST)
             if review_form.is_valid():
                 review = review_form.save(commit=False)
@@ -39,10 +45,9 @@ def restaurant_detail(request, restaurant_id):
                 review.save()
                 messages.success(request, 'Review posted successfully!')
                 return redirect('restaurant_detail', restaurant_id=restaurant.id)
-    else:
-        reservation_form = ReservationForm()
-        review_form = ReviewForm()
-    
+            else:
+                messages.error(request, 'Review form is invalid.')
+
     return render(request, 'booking/restaurant_detail.html', {
         'restaurant': restaurant,
         'reservation_form': reservation_form,
@@ -130,22 +135,42 @@ def manager_check(user):
 @login_required
 @user_passes_test(manager_check)
 def manage_restaurant(request, restaurant_id):
-    # Ensure the restaurant belongs to the logged-in manager
-    restaurant = get_object_or_404(Restaurant, id=restaurant_id, manager=request.user)
+    restaurant = get_object_or_404(Restaurant, id=restaurant_id, manager=request.user)  # Ensure only the manager can access
+    form = RestaurantForm(request.POST or None, instance=restaurant)
 
-    if request.method == 'POST':
-        form = RestaurantForm(request.POST, instance=restaurant)
+    if request.method == 'POST' and 'update_restaurant' in request.POST:
         if form.is_valid():
             form.save()
             messages.success(request, 'Restaurant details updated successfully!')
             return redirect('manage_restaurant', restaurant_id=restaurant.id)
-    else:
-        form = RestaurantForm(instance=restaurant)
+
+    reservations = Reservation.objects.filter(restaurant=restaurant).order_by('date')
 
     return render(request, 'booking/manage_restaurant.html', {
+        'restaurant': restaurant,
         'form': form,
-        'restaurant': restaurant
+        'reservations': reservations,
     })
+    
+    
+@login_required
+def edit_reservation(request, reservation_id):
+    reservation = get_object_or_404(Reservation, id=reservation_id, restaurant__manager=request.user)
+    form = ReservationForm(request.POST or None, instance=reservation)
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Reservation updated successfully!')
+        return redirect('manage_restaurant', restaurant_id=reservation.restaurant.id)
+    return render(request, 'booking/edit_reservation.html', {'form': form})
+
+@login_required
+def delete_reservation(request, reservation_id):
+    reservation = get_object_or_404(Reservation, id=reservation_id, restaurant__manager=request.user)
+    restaurant_id = reservation.restaurant.id
+    reservation.delete()
+    messages.success(request, 'Reservation deleted successfully!')
+    return redirect('manage_restaurant', restaurant_id=restaurant_id)
+
     
 @login_required
 def cancel_reservation(request, reservation_id):
@@ -156,3 +181,42 @@ def cancel_reservation(request, reservation_id):
     else:
         messages.error(request, "Past reservations cannot be cancelled or deleted.")
     return redirect('user_profile')
+
+
+User = get_user_model()  # Correct way to get the User model
+
+@login_required
+def user_profile_public(request, user_id):
+    user_profile = get_object_or_404(User, pk=user_id)  # Now correctly using the custom User model
+    reservations = Reservation.objects.filter(user=user_profile).order_by('-date')
+    reviews = Review.objects.filter(user=user_profile).order_by('-date_posted')
+    context = {
+        'user': user_profile,
+        'reservations': reservations,
+        'reviews': reviews,
+        'today': date.today(),
+    }
+    return render(request, 'booking/user_profile_public.html', context)
+
+
+@login_required
+def edit_review(request, review_id):
+    review = get_object_or_404(Review, id=review_id, user=request.user)  # Ensures that users can only edit their own reviews
+    if request.method == 'POST':
+        form = ReviewForm(request.POST, instance=review)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Review updated successfully!')
+            return redirect('restaurant_detail', restaurant_id=review.restaurant.id)
+    else:
+        form = ReviewForm(instance=review)
+
+    return render(request, 'booking/edit_review.html', {'form': form})
+
+@login_required
+def delete_review(request, review_id):
+    review = get_object_or_404(Review, id=review_id, user=request.user)  # Ensures that users can only delete their own reviews
+    restaurant_id = review.restaurant.id
+    review.delete()
+    messages.success(request, 'Review deleted successfully!')
+    return redirect('restaurant_detail', restaurant_id=restaurant_id)
