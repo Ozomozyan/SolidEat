@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 # Create your views here.
 from django.shortcuts import render
-from .models import Restaurant, Reservation
+from .models import Restaurant, Reservation, Review
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from .forms import ReservationForm
@@ -13,6 +13,7 @@ from .models import Restaurant
 from .forms import RestaurantForm
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .forms import ReservationForm, ReviewForm
+from datetime import date, datetime, timedelta
 
 def home(request):
     return render(request, 'home.html')
@@ -68,7 +69,19 @@ def register(request):
 
 @login_required
 def user_profile(request):
-    return render(request, 'booking/user_profile.html')
+    # Fetching additional data related to the user
+    reservations = Reservation.objects.filter(user=request.user).order_by('-date')
+    reviews = Review.objects.filter(user=request.user).order_by('-date_posted')
+
+    context = {
+        'user': request.user,
+        'reservations': reservations,
+        'reviews': reviews,
+        'today': date.today(),
+    }
+    return render(request, 'booking/user_profile.html', context)
+
+
 
 @login_required
 def book_reservation(request, restaurant_id):
@@ -76,16 +89,39 @@ def book_reservation(request, restaurant_id):
     if request.method == 'POST':
         form = ReservationForm(request.POST)
         if form.is_valid():
+            # Start by creating a reservation instance from the form, but don't save it yet
             reservation = form.save(commit=False)
             reservation.restaurant = restaurant
             reservation.user = request.user
+
+            # Check current reservations to ensure capacity is not exceeded
+            reservation_start_time = datetime.combine(reservation.date, reservation.time)
+            reservation_end_time = reservation_start_time + timedelta(hours=3)  # Define how long a reservation blocks capacity
+
+            # Fetch reservations that overlap this timeframe
+            overlapping_reservations = Reservation.objects.filter(
+                restaurant=restaurant,
+                date=reservation.date,
+                time__range=(reservation.time, (reservation_end_time - timedelta(seconds=1)).time()),
+                is_active=True
+            )
+
+            current_capacity = sum(r.number_of_people for r in overlapping_reservations)
+            if current_capacity + reservation.number_of_people > restaurant.capacity:
+                messages.error(request, "Unable to book reservation due to capacity limits.")
+                return render(request, 'booking/reservation_form.html', {'form': form, 'restaurant': restaurant})
+
+            # Save reservation if capacity checks pass
             reservation.save()
-            # Redirect to a new URL, for example the restaurant detail page
+            messages.success(request, 'Reservation made successfully!')
             return redirect('restaurant_detail', restaurant_id=restaurant.id)
+        else:
+            messages.error(request, "There was a problem with your reservation form.")
     else:
         form = ReservationForm()
 
     return render(request, 'booking/reservation_form.html', {'form': form, 'restaurant': restaurant})
+
 
 
 def manager_check(user):
@@ -110,3 +146,13 @@ def manage_restaurant(request, restaurant_id):
         'form': form,
         'restaurant': restaurant
     })
+    
+@login_required
+def cancel_reservation(request, reservation_id):
+    reservation = get_object_or_404(Reservation, id=reservation_id, user=request.user)
+    if reservation.date > date.today():
+        reservation.delete()  # This will completely remove the reservation from the database
+        messages.success(request, "Your reservation has been successfully deleted.")
+    else:
+        messages.error(request, "Past reservations cannot be cancelled or deleted.")
+    return redirect('user_profile')

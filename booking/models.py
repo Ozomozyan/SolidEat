@@ -9,6 +9,13 @@ class User(AbstractUser):
 
 # Define the Restaurant model
 class Restaurant(models.Model):
+    manager = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,  # Corrected from on_related to on_delete
+        null=True,
+        blank=True,
+        related_name='managed_restaurants'
+    )
     TYPE_CHOICES = (
         ('S', 'Solidaire'),  # 'S' for Solidaire
         ('E', 'Economique'),  # 'E' for Economique
@@ -33,6 +40,7 @@ class Reservation(models.Model):
     time = models.TimeField()
     number_of_people = models.IntegerField(default=1)
     special_requests = models.TextField(blank=True, null=True)
+    is_active = models.BooleanField(default=True)  # Indicates if the reservation is active or cancelled
 
     def __str__(self):
         return f"{self.user} reservation at {self.restaurant} on {self.date} at {self.time}"

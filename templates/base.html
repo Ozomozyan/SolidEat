@@ -10,10 +10,42 @@
 <body>
     <header>
         <h1>Welcome to SolidEat</h1>
+        {% if user.is_authenticated %}
+            <p>Hello, {{ user.username }}!</p>
+            <a href="{% url 'user_profile' %}">Profile</a> |
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit">Logout</button>
+            </form>            
+        {% else %}
+            <a href="{% url 'login' %}">Login</a> |
+            <a href="{% url 'register' %}">Register</a>
+        {% endif %}
     </header>
     <nav>
-        <!-- Navigation Links -->
-    </nav>
+        <a href="{% url 'home' %}">Home</a> |
+        <a href="{% url 'list_restaurants' %}">Restaurants</a>
+        {% if user.is_authenticated and user.is_manager %}
+            {% if user.managed_restaurants.exists %}
+                {% for restaurant in user.managed_restaurants.all %}
+                    <a href="{% url 'manage_restaurant' restaurant_id=restaurant.id %}">Manage {{ restaurant.name }}</a>
+                {% endfor %}
+            {% else %}
+                <p>You are a manager but no restaurant is associated with your account.</p>
+            {% endif %}
+        {% endif %}
+    </nav>   
+        <!-- Messages display area -->
+    <div class="container">
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+
     <main>
         {% block content %}{% endblock %}
     </main>
@@ -21,5 +53,6 @@
         <p>© 2024 SolidEat. All rights reserved.</p>
     </footer>
     <script src="{% static 'js/main.js' %}"></script>
+    {% block extra_js %}{% endblock %}
 </body>
 </html>

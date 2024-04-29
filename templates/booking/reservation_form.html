@@ -8,18 +8,46 @@
         <div class="form-group">
             <label for="id_date">Date:</label>
             {{ form.date }}
+            {% if form.date.errors %}
+            <div class="form-errors">
+                {% for error in form.date.errors %}
+                <p style="color: red;">{{ error }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
         </div>
         <div class="form-group">
             <label for="id_time">Time:</label>
             {{ form.time }}
+            {% if form.time.errors %}
+            <div class="form-errors">
+                {% for error in form.time.errors %}
+                <p style="color: red;">{{ error }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
         </div>
         <div class="form-group">
             <label for="id_number_of_people">Number of people:</label>
             {{ form.number_of_people }}
+            {% if form.number_of_people.errors %}
+            <div class="form-errors">
+                {% for error in form.number_of_people.errors %}
+                <p style="color: red;">{{ error }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
         </div>
         <div class="form-group">
             <label for="id_special_requests">Special requests:</label>
             {{ form.special_requests }}
+            {% if form.special_requests.errors %}
+            <div class="form-errors">
+                {% for error in form.special_requests.errors %}
+                <p style="color: red;">{{ error }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
         </div>
         <button type="submit" class="btn-submit">Book Now</button>
     </form>

@@ -1,8 +1,36 @@
 {% extends 'base.html' %}
 
-{% block content %}
-<h2>User Profile</h2>
-<p>Welcome, {{ request.user.username }}!</p>
+{% load static %}
 
-<a href="{% url 'list_restaurants' %}">View Restaurants</a>
+{% block content %}
+<h1>User Profile</h1>
+<p>Welcome, {{ user.username }}!</p>
+
+<h2>Your Reservations</h2>
+<ul>
+    {% for reservation in reservations %}
+    <li>
+        {{ reservation.restaurant.name }} on {{ reservation.date }} at {{ reservation.time }}
+        {% if reservation.is_active and reservation.date > today %}
+            <a href="{% url 'cancel_reservation' reservation.id %}" class="cancel-link">Cancel Reservation</a>
+        {% endif %}
+    </li>
+    {% empty %}
+    <p>You have no reservations.</p>
+    {% endfor %}
+</ul>
+
+<h2>Your Reviews</h2>
+<ul>
+    {% for review in reviews %}
+        <li>Review for {{ review.restaurant.name }}: {{ review.text }}</li>
+    {% empty %}
+        <p>You have not posted any reviews.</p>
+    {% endfor %}
+</ul>
 {% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/cancel-reservation.js' %}"></script>
+{% endblock %}
+

@@ -7,6 +7,8 @@ from django.forms import ModelForm, DateInput, TimeInput, Textarea, NumberInput,
 from .models import Reservation
 from .models import Review
 from django.contrib.auth.models import Group
+from django.core.exceptions import ValidationError
+from datetime import date, timedelta
 
 class ReservationForm(ModelForm):
     class Meta:
@@ -19,26 +21,24 @@ class ReservationForm(ModelForm):
             'special_requests': Textarea(attrs={'rows': 3}),
         }
 
-
+    def clean_date(self):
+        input_date = self.cleaned_data['date']
+        # Ensure the reservation is at least one day in the future
+        if input_date <= date.today():
+            raise ValidationError("Reservations must be made at least one day in advance.")
+        return input_date
 
 class CustomUserCreationForm(UserCreationForm):
-    is_manager = forms.BooleanField(required=False, help_text='Check if registering as a restaurant manager.')
-
     class Meta:
         model = User
-        fields = ['username', 'email', 'password1', 'password2', 'is_manager']
+        fields = ['username', 'email', 'password1', 'password2']  # Remove 'is_manager' from this list
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        user.is_manager = self.cleaned_data['is_manager']
-        if user.is_manager:
-            # Optionally assign the user to a group based on their role
-            group, _ = Group.objects.get_or_create(name='Managers')
-            user.save()
-            user.groups.add(group)
-        else:
+        if commit:
             user.save()
         return user
+
 
 class RestaurantForm(ModelForm):
     class Meta:
