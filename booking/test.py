@@ -15,7 +15,7 @@ class ReservationTests(TestCase):
             city="Testville",
             tt="123,456",
             type='S',
-            capacity=10  # Set a known capacity
+            capacity=10  # Set a capacity
         )
 
 
@@ -29,7 +29,7 @@ class ReservationTests(TestCase):
             number_of_people=10,
             is_active=True
         )
-        # Try to make another reservation that would exceed capacity
+        # Another reservation that would exceed capacity
         response = self.client.post('/booking/reserve/', {
             'user': self.user.id,
             'restaurant': self.restaurant.id,
@@ -38,5 +38,5 @@ class ReservationTests(TestCase):
             'number_of_people': 1,
             'is_active': True
         })
-        self.assertNotEqual(response.status_code, 302)  # Assuming failure does not redirect
+        self.assertNotEqual(response.status_code, 302)
 
