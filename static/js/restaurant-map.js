@@ -1,12 +1,11 @@
-document.addEventListener('DOMContentLoaded', function() {
-    var mapLocation = document.getElementById('restaurant-map').dataset.location;
-    var map = L.map('restaurant-map').setView([mapLocation], 13);
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
-
-    var marker = L.marker([mapLocation]).addTo(map);
-    marker.bindPopup("<b>" + "{{ restaurant.name }}" + "</b>").openPopup();
-});
+function initMap() {
+    var restaurantLocation = {lat: 48.866667, lng: 2.333333}; // Remplacez par vos coordonnées
+    var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 8,
+        center: restaurantLocation
+    });
+    var marker = new google.maps.Marker({
+        position: restaurantLocation,
+        map: map
+    });
+}

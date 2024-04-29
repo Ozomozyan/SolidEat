@@ -34,10 +34,12 @@ nav ul li {
 .hero-text h1 {
     margin: 0;
     font-size: 3em;
+    color: black;
 }
 
 .hero-text p {
     font-size: 1.5em;
+    color: black;
 }
 
 .btn-primary {
@@ -52,9 +54,20 @@ nav ul li {
 .features {
     display: flex;
     justify-content: space-around;
+    flex-wrap: wrap; /* Permet aux éléments de passer à la ligne si nécessaire */
     margin-top: 20px;
     padding: 20px;
 }
+
+/* Petit écran, typiquement pour les téléphones */
+@media (max-width: 600px) {
+    .features {
+        flex-direction: column; /* Empile les éléments verticalement */
+        align-items: center; /* Centre les éléments horizontalement */
+        padding: 10px; /* Ajustez le padding si nécessaire pour les petits écrans */
+    }
+}
+
 
 .feature h2 {
     color: #007bff;
@@ -83,6 +96,22 @@ nav ul li {
 
 
 /*Restaurant details css*/
+.back-button {
+    position: absolute;
+    left: 10px; /* Ajustez selon votre layout */
+    top: 10px; /* Ajustez selon votre layout */
+    padding: 8px 16px;
+    background-color: #f4f4f4; /* Couleur de fond légère pour le bouton */
+    color: #3e70ed; /* Couleur du texte */
+    text-decoration: none; /* Enlève le soulignement par défaut des liens */
+    border: none;
+    border-radius: 5px; /* Arrondit les coins */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Ajoute une petite ombre pour un effet de profondeur */
+}
+
+.back-button:hover {
+    background-color: #e2e2e2; /* Changement de couleur au survol pour l'interaction */
+}
 
 .restaurant-detail {
     width: 80%;
@@ -99,9 +128,17 @@ nav ul li {
     margin-bottom: 20px;
 }
 
+.rating .stars {
+    color: #e6b800;
+}
 .map-container {
     width: 100%;
     height: 400px;
+}
+#map {
+    height: 200px; /* ou la hauteur que vous préférez */
+    /*bord rond*/
+    border-radius: 20px;
 }
 
 .gallery img {
@@ -120,7 +157,61 @@ nav ul li {
     padding-bottom: 10px;
     margin-bottom: 10px;
 }
+.description {
+    margin-bottom: 1rem; /* Ajoutez un espace en dessous de la description */
+}
 
+.button-container {
+    display: flex;
+    justify-content: space-around; /* Cette propriété va répartir l'espace également autour des boutons */
+    margin-bottom: 1rem; /* Ajoutez un espace en dessous des boutons */
+}
+
+.button-container button {
+    flex: 1; /* Les boutons prendront une largeur égale */
+    margin: 0 5px; /* Ajoutez de l'espace entre les boutons */
+    padding: 10px 20px; /* Ajoutez du padding pour augmenter la taille des boutons */
+    cursor: pointer;
+    border-radius: 10px;
+    /* pas de bordure visiblie */
+    border: none;
+    transition: background-color 0.3s;
+}
+#reserve-button {
+    background-color: #305ded; /* Vert */
+    color: white; /* Texte blanc */
+}
+
+#evaluate-button {
+    background-color: #bac1cb; /* Rouge */
+    color: white; /* Texte blanc */
+}
+#reserve-button:hover,
+#evaluate-button:hover {
+    opacity: 0.8; /* Rend le bouton légèrement transparent au survol */
+}
+#reserve-button:active {
+    background-color: #042ea2; /* Assombrir la couleur verte pour un effet de clic */
+}
+
+#evaluate-button:active {
+    background-color: #7c7c7c; /* Assombrir la couleur rouge pour un effet de clic */
+}
+
+/* Media query pour les écrans plus grands */
+@media (min-width: 601px) {
+    .button-container {
+        flex-direction: column;
+        align-items: flex-start; /* Alignement des boutons à gauche pour les grands écrans */
+    }
+
+    .button-container .button {
+        /* Définit une largeur fixe pour les boutons sur les grands écrans */
+        margin-bottom: 10px; /* Ajoute de l'espace entre les boutons empilés */
+    }
+
+    
+}
 
 /* Registrations */
 .container {
@@ -131,6 +222,9 @@ nav ul li {
     background-color: #fff;
     border-radius: 8px;
 }
+
+/* Ajoutez des media queries si nécessaire pour gérer les tailles d'écran plus petites */
+
 
 h2 {
     text-align: center;
