@@ -15,9 +15,10 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from .forms import ReservationForm, ReviewForm
 from datetime import date, datetime, timedelta
 from django.utils import timezone
-from django.db.models import Count
+from django.db.models import Count, Avg
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+import math
 
 
 def home(request):
@@ -27,6 +28,17 @@ def restaurant_detail(request, restaurant_id):
     restaurant = get_object_or_404(Restaurant, id=restaurant_id)
     reservation_form = ReservationForm()
     review_form = ReviewForm()
+
+    average_rating_result = restaurant.reviews.aggregate(Avg('rating'))
+    average_rating = average_rating_result['rating__avg']
+    review_count = restaurant.reviews.count()
+
+    if average_rating is not None:
+        rating_percentage = (average_rating / 5) * 100  # Assuming 5 is the max rating
+        average_rating = round(average_rating, 1)
+    else:
+        rating_percentage = 0
+        average_rating = "No ratings"
 
     # Split coordinates for Google Maps
     coordinates = restaurant.tt.split(', ') if restaurant.tt else (None, None)
@@ -60,7 +72,10 @@ def restaurant_detail(request, restaurant_id):
         'restaurant': restaurant,
         'reservation_form': reservation_form,
         'review_form': review_form,
-        'coordinates': coordinates  # Pass coordinates to the template
+        'coordinates': coordinates,
+        'average_rating': average_rating,
+        'rating_percentage': rating_percentage,
+        'review_count': review_count,
     }
 
     return render(request, 'booking/restaurant_detail.html', context)

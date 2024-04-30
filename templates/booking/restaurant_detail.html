@@ -21,10 +21,16 @@
         <span class="capacity">Capacity: {{ restaurant.capacity }} guests</span>
     </div>
     <div class="rating">
-        <span>4,2</span>
-        <span class="stars">★★★★☆</span>
-        <span>(14)</span>
-    </div>
+        {% if average_rating != "No ratings" %}
+        <span>{{ average_rating }}</span>
+        <div class="circle-rating" style="background: conic-gradient(#4CAF50 {{ rating_percentage }}%, #ddd {{ rating_percentage }}%);">
+            <div class="number">{{ average_rating }}</div>
+        </div>
+        <span>({{ review_count }} reviews)</span>
+        {% else %}
+        <span>{{ average_rating }}</span>
+        {% endif %}
+    </div>    
     <div class="description">
         <h3>Description</h3>
         <p>{{ restaurant.description }}</p>

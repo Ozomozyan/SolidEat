@@ -498,3 +498,20 @@ button.btn-primary:hover {
 .btn-submit:hover {
     background-color: #0056b3;
 }
+
+
+.circle-rating {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 5px;
+    background-color: #ddd;
+}
+
+.number {
+    font-weight: bold;
+    color: #333;
+}
