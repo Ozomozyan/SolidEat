@@ -1,6 +1,6 @@
 from django.urls import path
 from . import views
-from .views import manage_restaurant, user_profile_public, edit_review, delete_review, cancel_reservation, edit_reservation, delete_reservation
+from .views import manage_restaurant, user_profile_public, edit_review, delete_review, cancel_reservation, edit_reservation, delete_reservation, start_chat, view_chat, start_chat_by_username
 
 urlpatterns = [
     path('restaurants/', views.list_restaurants, name='list_restaurants'),
@@ -13,4 +13,7 @@ urlpatterns = [
     path('review/delete/<int:review_id>/', delete_review, name='delete_review'),
     path('reservation/edit/<int:reservation_id>/', edit_reservation, name='edit_reservation'),
     path('reservation/delete/<int:reservation_id>/', delete_reservation, name='delete_reservation'),
+    path('chat/<int:user_id>/', start_chat, name='start_chat'),
+    path('chat/start_by_username/', start_chat_by_username, name='start_chat_by_username'),
+    path('chat/view/<int:conversation_id>/', view_chat, name='view_chat'),
 ]

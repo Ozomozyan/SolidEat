@@ -37,9 +37,28 @@
         <p>You have not posted any reviews.</p>
     {% endfor %}
 </ul>
-{% endblock %}
+
+
+<h2>Existing Conversations</h2>
+<ul>
+{% for conversation in conversations %}
+    <li><a href="{% url 'view_chat' conversation_id=conversation.id %}">Conversation #{{ conversation.id }}</a></li>
+{% empty %}
+    <p>No conversations yet.</p>
+{% endfor %}
+</ul>
+
+<!-- Form to start a new conversation -->
+<h2>Start a New Conversation</h2>
+<form method="post" action="{% url 'start_chat_by_username' %}">
+    {% csrf_token %}
+    <label for="username">Enter Username:</label>
+    <input type="text" id="username" name="username" required>
+    <button type="submit">Start Chat</button>
+</form>
 
 {% block extra_js %}
 <script src="{% static 'js/cancel-reservation.js' %}"></script>
 {% endblock %}
 
+{% endblock %}

@@ -15,6 +15,9 @@ from django.contrib.auth.decorators import login_required, user_passes_test
 from .forms import ReservationForm, ReviewForm
 from datetime import date, datetime, timedelta
 from django.utils import timezone
+from django.db.models import Count
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 
 def home(request):
@@ -80,10 +83,13 @@ def user_profile(request):
                                               time__gte=current_datetime.time()).order_by('-date')
     reviews = Review.objects.filter(user=request.user).order_by('-date_posted')
     
+    conversations = Conversation.objects.filter(participants=request.user).distinct()
+    
     context = {
         'user': request.user,
         'reservations': reservations,
         'reviews': reviews,
+        'conversations': conversations,
         'today': date.today(),
     }
     return render(request, 'booking/user_profile.html', context)
@@ -221,3 +227,57 @@ def delete_review(request, review_id):
     review.delete()
     messages.success(request, 'Review deleted successfully!')
     return redirect('restaurant_detail', restaurant_id=restaurant_id)
+
+
+
+
+from .models import User, Message, Conversation
+
+@login_required
+def start_chat(request, user_id):
+    other_user = get_object_or_404(User, id=user_id)
+    if request.user == other_user:
+        messages.error(request, "You cannot start a conversation with yourself.")
+        return redirect('user_profile')
+
+    # Find conversations that include exactly these two users
+    conversations = Conversation.objects.filter(participants__in=[request.user, other_user]).annotate(num_participants=Count('participants')).filter(num_participants=2)
+
+    if conversations.count() == 1:
+        conversation = conversations.first()
+    elif conversations.count() == 0:
+        # No existing conversation found, create a new one
+        conversation = Conversation.objects.create()
+        conversation.participants.add(request.user, other_user)
+    else:
+        # Handle unexpected case, e.g., data corruption where >1 such conversations exist
+        return redirect('error_handling_view')
+
+    return redirect('view_chat', conversation_id=conversation.id)
+
+def view_chat(request, conversation_id):
+    conversation = get_object_or_404(Conversation, id=conversation_id)
+    if request.method == 'POST':
+        text = request.POST.get('message')
+        Message.objects.create(conversation=conversation, sender=request.user, text=text)
+    messages = conversation.messages.all().order_by('timestamp')
+    return render(request, 'booking/conversation.html', {'conversation': conversation, 'messages': messages})
+
+
+@login_required
+def start_chat_by_username(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        try:
+            other_user = User.objects.get(username=username)
+            # Avoid chatting with oneself
+            if request.user == other_user:
+                messages.error(request, "You cannot start a chat with yourself.")
+                return HttpResponseRedirect(reverse('user_profile'))
+
+            # Create or get existing conversation
+            conversation, created = Conversation.objects.get_or_create_participants(request.user, other_user)
+            return HttpResponseRedirect(reverse('view_chat', args=[conversation.id]))
+        except User.DoesNotExist:
+            messages.error(request, "User not found.")
+    return HttpResponseRedirect(reverse('user_profile'))

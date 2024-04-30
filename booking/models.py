@@ -56,3 +56,34 @@ class Review(models.Model):
     def __str__(self):
         return f"{self.user.username} review of {self.restaurant.name}: {self.rating}/5"
 
+
+class ConversationManager(models.Manager):
+    def get_or_create_participants(self, user1, user2):
+        conversation = self.filter(participants=user1).filter(participants=user2)
+        if conversation.exists():
+            return conversation.first(), False
+        else:
+            conversation = self.create()
+            conversation.participants.add(user1, user2)
+            return conversation, True
+
+class Conversation(models.Model):
+    participants = models.ManyToManyField(settings.AUTH_USER_MODEL)
+    objects = ConversationManager()
+
+
+    def get_other_participant(self, user):
+        return self.participants.exclude(id=user.id).first().username
+
+
+class Message(models.Model):
+    conversation = models.ForeignKey(Conversation, related_name='messages', on_delete=models.CASCADE)
+    sender = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='messages', on_delete=models.CASCADE)
+    text = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return "From {} to {} at {}".format(self.sender, self.conversation, self.timestamp)
+    
+    
+    

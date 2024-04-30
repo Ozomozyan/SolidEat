@@ -26,4 +26,8 @@
     <li>Reservation at {{ reservation.restaurant.name }} on {{ reservation.date }}</li>
     {% endfor %}
 </ul>
+
+{% if profile_user != request.user %}
+    <a href="{% url 'start_chat' user_id=profile_user.id %}" class="btn btn-primary">Start Conversation</a>
+{% endif %}
 {% endblock %}
