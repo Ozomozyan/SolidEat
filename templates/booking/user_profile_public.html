@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<a href="javascript:void(0);" onclick="history.back();" class="back-button">
+    &lt; Back
+</a>
 <h1>Profile of {{ profile_user.username }}</h1>
 {% if profile_user.is_manager %}
 <p>This user manages the following restaurant(s):</p>

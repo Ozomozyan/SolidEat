@@ -1,4 +1,4 @@
-/* Resetting some default margins and paddings */
+
 * {
     margin: 0;
     padding: 0;
@@ -10,34 +10,68 @@ body {
     color: #333;
     background-color: #fff;
 }
+p, li {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #666;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 10px;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+li a {
+    color: #007aff;
+    text-decoration: none;
+}
+
+a {
+    color: #007aff;
+    text-decoration: none;
+}
+.cancel-link {
+    color: #ff3b30;
+}
+
+.cancel-link:hover {
+    text-decoration: underline;
+}
 
 
 header {
     background-color: #f8f8f8;
-    padding: 20px 40px; /* Ample padding on the top and bottom, more on the sides */
-    text-align: center; /* Center-aligning the header content */
+    padding: 20px 40px; 
+    text-align: center; 
 }
 
 header h1 {
     font-size: 24px;
     color: #000;
-    margin-bottom: 10px; /* Space below the title */
+    margin-bottom: 10px; 
 }
 
 header p {
     font-size: 16px;
-    color: #666; /* Lighter text color for less emphasis */
+    color: #666; 
 }
 
 header a, nav a {
-    color: #007aff; /* Blue color for links */
-    text-decoration: none; /* Removing underline from links */
-    margin-right: 15px; /* Spacing between links */
+    color: #007aff; 
+    text-decoration: none; 
+    margin-right: 15px; 
     font-size: 16px;
 }
 
 header form {
-    display: inline; /* Keeping the logout button inline */
+    display: inline; 
 }
 
 header button {
@@ -50,14 +84,14 @@ header button {
 }
 
 header button:hover {
-    background-color: #0056b3; /* Darker shade on hover */
+    background-color: #0056b3; 
 }
 
 nav {
     background-color: #f1f1f1;
-    padding: 10px 40px; /* Slightly less padding than header */
+    padding: 10px 40px; 
     text-align: center;
-    border-top: 1px solid #e7e7e7; /* Subtle border top */
+    border-top: 1px solid #e7e7e7; 
 }
 
 nav p {
@@ -115,9 +149,9 @@ nav ul li {
 
 @media (max-width: 600px) {
     .features {
-        flex-direction: column; /* Empile les éléments verticalement */
-        align-items: center; /* Centre les éléments horizontalement */
-        padding: 10px; /* Ajustez le padding si nécessaire pour les petits écrans */
+        flex-direction: column; 
+        align-items: center; 
+        padding: 10px; 
     }
 }
 
@@ -148,39 +182,39 @@ nav ul li {
 
 /*Restaurant list css*/
 body {
-    background-color: #f4f4f4; /* Couleur de fond légère pour tout le body */
+    background-color: #f4f4f4; 
 }
 
 .card {
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Ajoute une ombre douce pour un effet élévé */
-    transition: transform 0.3s ease-in-out; /* Animation douce pour le hover */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+    transition: transform 0.3s ease-in-out; 
 }
 
 .card:hover {
-    transform: translateY(-5px); /* Lève légèrement la carte lors du survol */
+    transform: translateY(-5px); 
 }
 
 .card-img-top {
-    height: 150px; /* Fixe la hauteur des images pour uniformité */
-    object-fit: cover; /* S'assure que les images couvrent bien l'espace sans déformation */
+    height: 150px; 
+    object-fit: cover; 
 }
 /*Restaurant details css*/
 
 .back-button {
     position: absolute;
-    left: 10px; /* Ajustez selon votre layout */
-    top: 10px; /* Ajustez selon votre layout */
+    left: 10px; 
+    top: 10px; 
     padding: 8px 16px;
-    background-color: #f4f4f4; /* Couleur de fond légère pour le bouton */
-    color: #3e70ed; /* Couleur du texte */
-    text-decoration: none; /* Enlève le soulignement par défaut des liens */
+    background-color: #f4f4f4; 
+    color: #3e70ed; 
+    text-decoration: none; 
     border: none;
-    border-radius: 5px; /* Arrondit les coins */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Ajoute une petite ombre pour un effet de profondeur */
+    border-radius: 5px; 
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
 }
 
 .back-button:hover {
-    background-color: #e2e2e2; /* Changement de couleur au survol pour l'interaction */
+    background-color: #e2e2e2; 
 }
 .restaurant-detail {
     width: 80%;
@@ -296,15 +330,15 @@ input[type="email"],
 input[type="password"],
 textarea,
 select {
-    width: 100%; /* Full width of the container */
-    padding: 12px; /* Ample padding for ease of use */
-    margin: 8px 0; /* Space between form elements */
-    display: inline-block; /* Allows the width to take effect */
-    border: 1px solid #ccc; /* Subtle border */
-    border-radius: 5px; /* Rounded borders for a modern look */
-    box-sizing: border-box; /* Border and padding included in the width */
-    font-family: 'Helvetica Neue', Arial, sans-serif; /* Consistent font usage */
-    font-size: 16px; /* Slightly larger font for readability */
+    width: 100%; 
+    padding: 12px; 
+    margin: 8px 0; 
+    display: inline-block; 
+    border: 1px solid #ccc; 
+    border-radius: 5px; 
+    box-sizing: border-box; 
+    font-family: 'Helvetica Neue', Arial, sans-serif; 
+    font-size: 16px; 
 }
 
 input[type="text"]:focus,
@@ -312,69 +346,69 @@ input[type="email"]:focus,
 input[type="password"]:focus,
 textarea:focus,
 select:focus {
-    border-color: #007aff; /* Highlight focus with Apple-like blue */
-    outline: none; /* Remove default focus outline */
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(0, 122, 255, 0.6); /* Subtle shadow in and around the field */
+    border-color: #007aff; 
+    outline: none; 
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(0, 122, 255, 0.6); 
 }
 
 /* Style adjustments for text areas specifically */
 textarea {
-    height: 150px; /* Provide sufficient space for text entry */
-    resize: vertical; /* Allow vertical resizing only */
+    height: 150px; 
+    resize: vertical; 
 }
 
 
 .description {
-    margin-bottom: 1rem; /* Ajoutez un espace en dessous de la description */
+    margin-bottom: 1rem; 
 }
 
 .button-container {
     display: flex;
-    justify-content: space-around; /* Cette propriété va répartir l'espace également autour des boutons */
-    margin-bottom: 1rem; /* Ajoutez un espace en dessous des boutons */
+    justify-content: space-around; 
+    margin-bottom: 1rem; 
 }
 
 .button-container button {
-    flex: 1; /* Les boutons prendront une largeur égale */
-    margin: 0 5px; /* Ajoutez de l'espace entre les boutons */
-    padding: 10px 20px; /* Ajoutez du padding pour augmenter la taille des boutons */
+    flex: 1; 
+    margin: 0 5px; 
+    padding: 10px 20px; 
     cursor: pointer;
     border-radius: 10px;
-    /* pas de bordure visiblie */
+    
     border: none;
     transition: background-color 0.3s;
 }
 #reserve-button {
-    background-color: #305ded; /* Vert */
-    color: white; /* Texte blanc */
+    background-color: #305ded; 
+    color: white; 
 }
 
 #evaluate-button {
-    background-color: #bac1cb; /* Rouge */
-    color: white; /* Texte blanc */
+    background-color: #bac1cb; 
+    color: white; 
 }
 #reserve-button:hover,
 #evaluate-button:hover {
-    opacity: 0.8; /* Rend le bouton légèrement transparent au survol */
+    opacity: 0.8; 
 }
 #reserve-button:active {
-    background-color: #042ea2; /* Assombrir la couleur verte pour un effet de clic */
+    background-color: #042ea2; 
 }
 
 #evaluate-button:active {
-    background-color: #7c7c7c; /* Assombrir la couleur rouge pour un effet de clic */
+    background-color: #7c7c7c; 
 }
 
 /* Media query pour les écrans plus grands */
 @media (min-width: 601px) {
     .button-container {
         flex-direction: column;
-        align-items: flex-start; /* Alignement des boutons à gauche pour les grands écrans */
+        align-items: flex-start; 
     }
 
     .button-container .button {
-        /* Définit une largeur fixe pour les boutons sur les grands écrans */
-        margin-bottom: 10px; /* Ajoute de l'espace entre les boutons empilés */
+        
+        margin-bottom: 10px; 
     }
 
     

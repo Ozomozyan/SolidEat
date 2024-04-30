@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<a href="javascript:void(0);" onclick="history.back();" class="back-button">
+    &lt; Back
+</a>
 <h2>Manage Restaurant: {{ restaurant.name }}</h2>
 
 <form method="post" action="">
