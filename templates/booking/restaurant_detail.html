@@ -31,12 +31,15 @@
         <p> plein de blabla</p>
     </div>
     <div class="button-container">
-        <a href="/booking/restaurants-form/">
-            <button type="button" id="reserve-button">Réserver</button>
-        </a>
-        <a href="/booking/restaurants-form/">
-            <button type="button" id="evaluate-button">Évaluer</button>
-        </a>
+        {% if user.is_authenticated %}
+        
+            <a href="{% url 'book_reservation' restaurant.id %}">
+                <button type="button" id="reserve-button">Réserver</button>
+            </a>
+            <a href="#reviews">
+                <button type="button" id="evaluate-button">Évaluer</button>
+            </a>
+        {% endif %}
     </div>
     <div class="map-container">
         <div id="restaurant-map" data-location="Latitude,Longitude"></div>
@@ -45,7 +48,7 @@
     </div>
     
     
-    <div class="reviews">
+    <div class="reviews" id="reviews">
         <h3>Submit a Review</h3>
         <form method="post" action="{% url 'restaurant_detail' restaurant.id %}">
             {% csrf_token %}
