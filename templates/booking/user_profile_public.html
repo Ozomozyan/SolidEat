@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Profile of {{ user.username }}</h1>
-{% if user.is_manager %}
+<h1>Profile of {{ profile_user.username }}</h1>
+{% if profile_user.is_manager %}
 <p>This user manages the following restaurant(s):</p>
 <ul>
-    {% for restaurant in user.managed_restaurants.all %}
+    {% for restaurant in profile_user.managed_restaurants.all %}
     <li>{{ restaurant.name }} - <a href="{% url 'restaurant_detail' restaurant_id=restaurant.id %}">View Details</a></li>
     {% empty %}
     <li>No restaurants are managed by this user.</li>

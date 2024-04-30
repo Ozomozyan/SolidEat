@@ -14,6 +14,7 @@ from .forms import RestaurantForm
 from django.contrib.auth.decorators import login_required, user_passes_test
 from .forms import ReservationForm, ReviewForm
 from datetime import date, datetime, timedelta
+from django.utils import timezone
 
 
 def home(request):
@@ -74,10 +75,11 @@ def register(request):
 
 @login_required
 def user_profile(request):
-    # Fetching additional data related to the user
-    reservations = Reservation.objects.filter(user=request.user).order_by('-date')
+    current_datetime = timezone.now()
+    reservations = Reservation.objects.filter(user=request.user, date__gte=current_datetime.date(), 
+                                              time__gte=current_datetime.time()).order_by('-date')
     reviews = Review.objects.filter(user=request.user).order_by('-date_posted')
-
+    
     context = {
         'user': request.user,
         'reservations': reservations,
@@ -85,7 +87,6 @@ def user_profile(request):
         'today': date.today(),
     }
     return render(request, 'booking/user_profile.html', context)
-
 
 
 @login_required
@@ -185,18 +186,18 @@ def cancel_reservation(request, reservation_id):
 
 User = get_user_model()  # Correct way to get the User model
 
-@login_required
 def user_profile_public(request, user_id):
-    user_profile = get_object_or_404(User, pk=user_id)  # Now correctly using the custom User model
-    reservations = Reservation.objects.filter(user=user_profile).order_by('-date')
-    reviews = Review.objects.filter(user=user_profile).order_by('-date_posted')
+    profile_user = get_object_or_404(User, pk=user_id)
+    reservations = Reservation.objects.filter(user=profile_user).order_by('-date')
+    reviews = Review.objects.filter(user=profile_user).order_by('-date_posted')
     context = {
-        'user': user_profile,
+        'profile_user': profile_user,
         'reservations': reservations,
         'reviews': reviews,
         'today': date.today(),
     }
     return render(request, 'booking/user_profile_public.html', context)
+
 
 
 @login_required
