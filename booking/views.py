@@ -28,6 +28,9 @@ def restaurant_detail(request, restaurant_id):
     reservation_form = ReservationForm()
     review_form = ReviewForm()
 
+    # Split coordinates for Google Maps
+    coordinates = restaurant.tt.split(', ') if restaurant.tt else (None, None)
+
     if request.method == 'POST':
         if 'submit_reservation' in request.POST:
             reservation_form = ReservationForm(request.POST)
@@ -40,6 +43,7 @@ def restaurant_detail(request, restaurant_id):
                 return redirect('restaurant_detail', restaurant_id=restaurant.id)
             else:
                 messages.error(request, 'Reservation form is invalid.')
+
         elif 'submit_review' in request.POST:
             review_form = ReviewForm(request.POST)
             if review_form.is_valid():
@@ -52,11 +56,14 @@ def restaurant_detail(request, restaurant_id):
             else:
                 messages.error(request, 'Review form is invalid.')
 
-    return render(request, 'booking/restaurant_detail.html', {
+    context = {
         'restaurant': restaurant,
         'reservation_form': reservation_form,
-        'review_form': review_form
-    })
+        'review_form': review_form,
+        'coordinates': coordinates  # Pass coordinates to the template
+    }
+
+    return render(request, 'booking/restaurant_detail.html', context)
 
 def list_restaurants(request):
     restaurants = Restaurant.objects.all()

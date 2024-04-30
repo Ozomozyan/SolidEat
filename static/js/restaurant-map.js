@@ -1,26 +1,20 @@
-document.addEventListener('DOMContentLoaded', function() {
-    var mapLocation = document.getElementById('restaurant-map').dataset.location.split(',');
-    var location = { lat: parseFloat(mapLocation[0]), lng: parseFloat(mapLocation[1]) };
+function initMap() {
+    var mapContainer = document.getElementById('restaurant-map');
+    if (mapContainer) {
+        var location = mapContainer.getAttribute('data-location').split(',');
+        var mapOptions = {
+            center: new google.maps.LatLng(parseFloat(location[0]), parseFloat(location[1])),
+            zoom: 15,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        var map = new google.maps.Map(mapContainer, mapOptions);
+        var marker = new google.maps.Marker({
+            position: new google.maps.LatLng(parseFloat(location[0]), parseFloat(location[1])),
+            map: map,
+            title: 'Restaurant Location'
+        });
+    }
+}
 
-    var map = new google.maps.Map(document.getElementById('restaurant-map'), {
-        center: location,
-        zoom: 13
-    });
-
-    var marker = new google.maps.Marker({
-        position: location,
-        map: map,
-        title: '{{ restaurant.name }}'
-    });
-
-    var infoWindow = new google.maps.InfoWindow({
-        content: '<b>{{ restaurant.name }}</b>'
-    });
-
-    marker.addListener('click', function() {
-        infoWindow.open(map, marker);
-    });
-
-    // Open the popup immediately
-    infoWindow.open(map, marker);
-});
+// Ensure the initMap function is available globally when the Google Maps script calls it
+window.initMap = initMap;

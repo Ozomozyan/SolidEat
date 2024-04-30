@@ -42,9 +42,8 @@
         {% endif %}
     </div>
     <div class="map-container">
-        <div id="restaurant-map" data-location="Latitude,Longitude"></div>
-        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAq1Wk1v6DIKHQqvi4-94l-L7lVwdTQzJQ"></script>
-        <script src="{% static 'js/restaurant-map.js' %}"></script>
+        <!-- Set the dimensions for the map container -->
+        <div id="restaurant-map" data-location="{{ coordinates.0 }},{{ coordinates.1 }}"></div>
     </div>
     
     
@@ -74,4 +73,6 @@
 
 {% block extra_js %}
 <script src="{% static 'js/restaurant-map.js' %}"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAChHQ_Ui_hfebmjf1K8RsMoXc7XWOAnv0&callback=initMap"></script>
+
 {% endblock %}
