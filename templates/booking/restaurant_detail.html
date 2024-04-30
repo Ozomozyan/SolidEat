@@ -5,27 +5,46 @@
 {% block title %}{{ restaurant.name }}{% endblock %}
 
 {% block content %}
+<a href="/booking/restaurants/" class="back-button">
+     &lt; Back
+</a>
 <div class="restaurant-detail">
-    <h2>{{ restaurant.name }}</h2>
-    <div class="restaurant-meta">
-        <span class="location">{{ restaurant.location }}</span>
-        <span class="capacity">Capacity: {{ restaurant.capacity }} guests</span>
-    </div>
-    <div class="map-container">
-        <!-- Placeholder for map (Use an integration like Google Maps or Leaflet) -->
-        <div id="restaurant-map" data-location="{{ restaurant.location }}"></div>
-    </div>
     <div class="gallery">
-        <h3>Gallery</h3>
         <!-- Placeholder for image gallery -->
         {% for image in restaurant.images.all %}
         <img src="{{ image.url }}" alt="Image of {{ restaurant.name }}">
         {% endfor %}
     </div>
+    <h2>{{ restaurant.name }}</h2>
+    <div class="restaurant-meta">
+        <span class="location">{{ restaurant.location }}</span>
+        <span class="capacity">Capacity: {{ restaurant.capacity }} guests</span>
+    </div>
+    <div class="rating">
+        <span>4,2</span>
+        <span class="stars">★★★★☆</span>
+        <span>(14)</span>
+    </div>
     <div class="description">
         <h3>Description</h3>
         <p>{{ restaurant.description }}</p>
+        <p> plein de blabla</p>
     </div>
+    <div class="button-container">
+        <a href="/booking/restaurants-form/">
+            <button type="button" id="reserve-button">Réserver</button>
+        </a>
+        <a href="/booking/restaurants-form/">
+            <button type="button" id="evaluate-button">Évaluer</button>
+        </a>
+    </div>
+    <div class="map-container">
+        <div id="restaurant-map" data-location="Latitude,Longitude"></div>
+        <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAq1Wk1v6DIKHQqvi4-94l-L7lVwdTQzJQ"></script>
+        <script src="{% static 'js/restaurant-map.js' %}"></script>
+    </div>
+    
+    
     <div class="reviews">
         <h3>Submit a Review</h3>
         <form method="post" action="{% url 'restaurant_detail' restaurant.id %}">

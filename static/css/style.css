@@ -1,14 +1,68 @@
-body, html {
+/* Resetting some default margins and paddings */
+* {
     margin: 0;
     padding: 0;
-    font-family: 'Arial', sans-serif;
+    box-sizing: border-box;
 }
 
-header, footer {
-    background-color: #333;
-    color: white;
+body {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    color: #333;
+    background-color: #fff;
+}
+
+header {
+    background-color: #f8f8f8;
+    padding: 20px 40px; /* Ample padding on the top and bottom, more on the sides */
+    text-align: center; /* Center-aligning the header content */
+}
+
+header h1 {
+    font-size: 24px;
+    color: #000;
+    margin-bottom: 10px; /* Space below the title */
+}
+
+header p {
+    font-size: 16px;
+    color: #666; /* Lighter text color for less emphasis */
+}
+
+header a, nav a {
+    color: #007aff; /* Blue color for links */
+    text-decoration: none; /* Removing underline from links */
+    margin-right: 15px; /* Spacing between links */
+    font-size: 16px;
+}
+
+header form {
+    display: inline; /* Keeping the logout button inline */
+}
+
+header button {
+    padding: 8px 16px;
+    background-color: #007aff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+header button:hover {
+    background-color: #0056b3; /* Darker shade on hover */
+}
+
+nav {
+    background-color: #f1f1f1;
+    padding: 10px 40px; /* Slightly less padding than header */
     text-align: center;
-    padding: 1em;
+    border-top: 1px solid #e7e7e7; /* Subtle border top */
+}
+
+nav p {
+    color: #666;
+    font-size: 16px;
+    padding: 10px 0;
 }
 
 nav ul {
@@ -52,8 +106,18 @@ nav ul li {
 .features {
     display: flex;
     justify-content: space-around;
+    flex-wrap: wrap;
     margin-top: 20px;
     padding: 20px;
+    
+}
+
+@media (max-width: 600px) {
+    .features {
+        flex-direction: column; /* Empile les éléments verticalement */
+        align-items: center; /* Centre les éléments horizontalement */
+        padding: 10px; /* Ajustez le padding si nécessaire pour les petits écrans */
+    }
 }
 
 .feature h2 {
@@ -84,6 +148,22 @@ nav ul li {
 
 /*Restaurant details css*/
 
+.back-button {
+    position: absolute;
+    left: 10px; /* Ajustez selon votre layout */
+    top: 10px; /* Ajustez selon votre layout */
+    padding: 8px 16px;
+    background-color: #f4f4f4; /* Couleur de fond légère pour le bouton */
+    color: #3e70ed; /* Couleur du texte */
+    text-decoration: none; /* Enlève le soulignement par défaut des liens */
+    border: none;
+    border-radius: 5px; /* Arrondit les coins */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* Ajoute une petite ombre pour un effet de profondeur */
+}
+
+.back-button:hover {
+    background-color: #e2e2e2; /* Changement de couleur au survol pour l'interaction */
+}
 .restaurant-detail {
     width: 80%;
     margin: auto;
@@ -99,11 +179,20 @@ nav ul li {
     margin-bottom: 20px;
 }
 
+.rating .stars {
+    color: #e6b800;
+}
+
 .map-container {
     width: 100%;
     height: 400px;
 }
 
+#restaurant-map {
+    height: 200px;
+    width: 100%;
+    border-radius: 20px;
+}
 .gallery img {
     width: 200px;
     margin: 10px;
@@ -115,12 +204,163 @@ nav ul li {
     margin-top: 20px;
 }
 
-.review {
-    border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
-    margin-bottom: 10px;
+/* Base styling for the reviews container */
+.reviews {
+    max-width: 600px;
+    margin: 20px auto;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    color: #333;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+.reviews h3 {
+    color: #000;
+    font-size: 1.4em;
+}
+
+/* Styling for the form */
+form {
+    margin-bottom: 20px;
+}
+
+form p {
+    margin: 10px 0;
+}
+
+button {
+    background-color: #007aff;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* Individual review styling */
+.review {
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+    margin-top: 10px;
+}
+
+.review a {
+    color: #007aff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.review a:hover {
+    color: #0056b3;
+}
+
+.review p {
+    line-height: 1.5;
+    margin: 5px 0;
+}
+
+.review strong {
+    color: #000;
+}
+
+/* Styles for all form input fields */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea,
+select {
+    width: 100%; /* Full width of the container */
+    padding: 12px; /* Ample padding for ease of use */
+    margin: 8px 0; /* Space between form elements */
+    display: inline-block; /* Allows the width to take effect */
+    border: 1px solid #ccc; /* Subtle border */
+    border-radius: 5px; /* Rounded borders for a modern look */
+    box-sizing: border-box; /* Border and padding included in the width */
+    font-family: 'Helvetica Neue', Arial, sans-serif; /* Consistent font usage */
+    font-size: 16px; /* Slightly larger font for readability */
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+textarea:focus,
+select:focus {
+    border-color: #007aff; /* Highlight focus with Apple-like blue */
+    outline: none; /* Remove default focus outline */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(0, 122, 255, 0.6); /* Subtle shadow in and around the field */
+}
+
+/* Style adjustments for text areas specifically */
+textarea {
+    height: 150px; /* Provide sufficient space for text entry */
+    resize: vertical; /* Allow vertical resizing only */
+}
+
+
+.description {
+    margin-bottom: 1rem; /* Ajoutez un espace en dessous de la description */
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-around; /* Cette propriété va répartir l'espace également autour des boutons */
+    margin-bottom: 1rem; /* Ajoutez un espace en dessous des boutons */
+}
+
+.button-container button {
+    flex: 1; /* Les boutons prendront une largeur égale */
+    margin: 0 5px; /* Ajoutez de l'espace entre les boutons */
+    padding: 10px 20px; /* Ajoutez du padding pour augmenter la taille des boutons */
+    cursor: pointer;
+    border-radius: 10px;
+    /* pas de bordure visiblie */
+    border: none;
+    transition: background-color 0.3s;
+}
+#reserve-button {
+    background-color: #305ded; /* Vert */
+    color: white; /* Texte blanc */
+}
+
+#evaluate-button {
+    background-color: #bac1cb; /* Rouge */
+    color: white; /* Texte blanc */
+}
+#reserve-button:hover,
+#evaluate-button:hover {
+    opacity: 0.8; /* Rend le bouton légèrement transparent au survol */
+}
+#reserve-button:active {
+    background-color: #042ea2; /* Assombrir la couleur verte pour un effet de clic */
+}
+
+#evaluate-button:active {
+    background-color: #7c7c7c; /* Assombrir la couleur rouge pour un effet de clic */
+}
+
+/* Media query pour les écrans plus grands */
+@media (min-width: 601px) {
+    .button-container {
+        flex-direction: column;
+        align-items: flex-start; /* Alignement des boutons à gauche pour les grands écrans */
+    }
+
+    .button-container .button {
+        /* Définit une largeur fixe pour les boutons sur les grands écrans */
+        margin-bottom: 10px; /* Ajoute de l'espace entre les boutons empilés */
+    }
+
+    
+}
 
 /* Registrations */
 .container {

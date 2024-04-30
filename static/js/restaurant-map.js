@@ -1,12 +1,26 @@
 document.addEventListener('DOMContentLoaded', function() {
-    var mapLocation = document.getElementById('restaurant-map').dataset.location;
-    var map = L.map('restaurant-map').setView([mapLocation], 13);
+    var mapLocation = document.getElementById('restaurant-map').dataset.location.split(',');
+    var location = { lat: parseFloat(mapLocation[0]), lng: parseFloat(mapLocation[1]) };
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '© OpenStreetMap contributors'
-    }).addTo(map);
+    var map = new google.maps.Map(document.getElementById('restaurant-map'), {
+        center: location,
+        zoom: 13
+    });
 
-    var marker = L.marker([mapLocation]).addTo(map);
-    marker.bindPopup("<b>" + "{{ restaurant.name }}" + "</b>").openPopup();
+    var marker = new google.maps.Marker({
+        position: location,
+        map: map,
+        title: '{{ restaurant.name }}'
+    });
+
+    var infoWindow = new google.maps.InfoWindow({
+        content: '<b>{{ restaurant.name }}</b>'
+    });
+
+    marker.addListener('click', function() {
+        infoWindow.open(map, marker);
+    });
+
+    // Open the popup immediately
+    infoWindow.open(map, marker);
 });
