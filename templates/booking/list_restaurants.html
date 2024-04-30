@@ -1,15 +1,24 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h2>Restaurants</h2>
-<ul>
-    {% for restaurant in restaurants %}
-    <li>
-        {{ restaurant.name }} - <a href="{% url 'restaurant_detail' restaurant.id %}">Details</a>
-        {% if user.is_authenticated %}
-        - <a href="{% url 'book_reservation' restaurant.id %}">Reserve</a>
-        {% endif %}
-    </li>
-    {% endfor %}
-</ul>
+<div class="container mt-5">
+    <h2 class="mb-4">Restaurants</h2>
+    <div class="row">
+        {% for restaurant in restaurants %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img src="{{ restaurant.image_url }}" class="card-img-top" alt="{{ restaurant.name }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ restaurant.name }}</h5>
+                    <p class="card-text"><small class="text-muted">{{ restaurant.rating }} stars</small></p>
+                    <a href="{% url 'restaurant_detail' restaurant.id %}" class="btn btn-primary">Details</a>
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'book_reservation' restaurant.id %}" class="btn btn-secondary">Reserve</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}
