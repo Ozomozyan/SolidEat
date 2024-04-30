@@ -27,7 +27,8 @@
     {% endfor %}
 </ul>
 
-{% if profile_user != request.user %}
+<!-- Check if user is logged in and not the same as the profile being viewed -->
+{% if request.user.is_authenticated and profile_user != request.user %}
     <a href="{% url 'start_chat' user_id=profile_user.id %}" class="btn btn-primary">Start Conversation</a>
 {% endif %}
 {% endblock %}
