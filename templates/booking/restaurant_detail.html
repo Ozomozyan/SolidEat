@@ -11,9 +11,9 @@
 <div class="restaurant-detail">
     <div class="gallery">
         <!-- Placeholder for image gallery -->
-        {% for image in restaurant.images.all %}
-        <img src="{{ image.url }}" alt="Image of {{ restaurant.name }}">
-        {% endfor %}
+        
+        <img src="https://source.unsplash.com/random/800x600/?restaurant" alt="Image of {{ restaurant.name }}">
+        
     </div>
     <h2>{{ restaurant.name }}</h2>
     <div class="restaurant-meta">
@@ -22,7 +22,7 @@
     </div>
     <div class="rating">
         {% if average_rating != "No ratings" %}
-        <span>{{ average_rating }}</span>
+        
         <div class="circle-rating" style="background: conic-gradient(#4CAF50 {{ rating_percentage }}%, #ddd {{ rating_percentage }}%);">
             <div class="number">{{ average_rating }}</div>
         </div>

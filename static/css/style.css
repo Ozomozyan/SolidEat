@@ -200,6 +200,19 @@ body {
 }
 /*Restaurant details css*/
 
+/* mettre l'immage de la class gallery en arriere plan et que ssa taille prenne toute la largeur de la page */
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 20px;
+}
+.gallery img {
+    max-width: 100%; /* Limite la largeur de l'image à 100% de la largeur parent */
+    height: auto; /* Ajuste automatiquement la hauteur pour garder le ratio */
+    flex: 1 1 100%; /* S'étend sur 100% de la largeur disponible */
+}
+
 .back-button {
     position: absolute;
     left: 10px; 
@@ -241,7 +254,7 @@ body {
 }
 
 #restaurant-map {
-    height: 200px;
+    height: 75%;
     width: 100%;
     border-radius: 20px;
 }
