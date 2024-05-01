@@ -47,6 +47,9 @@ def restaurant_detail(request, restaurant_id):
         if 'submit_reservation' in request.POST:
             reservation_form = ReservationForm(request.POST)
             if reservation_form.is_valid():
+                if not request.user.is_authenticated:
+                    messages.info(request, "You need to be logged in to make a reservation.")
+                    return redirect('login')  # Ensure this URL is correct for your login view
                 reservation = reservation_form.save(commit=False)
                 reservation.user = request.user
                 reservation.restaurant = restaurant
@@ -58,6 +61,9 @@ def restaurant_detail(request, restaurant_id):
 
         elif 'submit_review' in request.POST:
             review_form = ReviewForm(request.POST)
+            if not request.user.is_authenticated:
+                messages.info(request, "You need to be logged in to post a review.")
+                return redirect('login')  # Redirect to login if not authenticated
             if review_form.is_valid():
                 review = review_form.save(commit=False)
                 review.user = request.user
